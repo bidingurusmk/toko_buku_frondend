@@ -11,7 +11,8 @@ import Login from './pages/Login'
 import Transaksi from "./pages/Transaksi";
 
 function Main() {
-    const [cartItems, setCartItems] = useState(JSON.parse(localStorage.getItem('cart')));
+    let load_storage = localStorage.getItem('cart')==null?[]:JSON.parse(localStorage.getItem('cart'))
+    const [cartItems, setCartItems] = useState(load_storage);
     const onAdd = (buku) => {
         const exist = cartItems.find(x => x.isbn === buku.isbn)
         if (exist) {
