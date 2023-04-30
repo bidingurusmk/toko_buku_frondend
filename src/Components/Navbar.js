@@ -1,13 +1,31 @@
 import {useState,useEffect} from "react"
 import {Link, useNavigate} from "react-router-dom"
+import axios from 'axios'
+
 
 function Navbar () 
     {
         const navigate = useNavigate();
+        const [user,setUser]=useState([]);
+        const token = {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem('token')}`
+            }
+        };
+        const getDataUser=()=>{
+            axios.get("http://localhost:8000/auth/getuserdata",token)
+            .then(response=>{
+                setUser(response.data.data)
+            })
+            .catch(err=>{
+    
+            })
+        }
         useEffect(() => {
             if(localStorage.getItem('token')==null){
                 navigate('/login', { replace: true })
             }
+            getDataUser()
         }, [])
         let logout=()=>{
             localStorage.removeItem("token")
@@ -41,8 +59,8 @@ function Navbar ()
                             </Link>
                         </li>
                         <li className="nav-item">
-                            <Link to="/contact" className="nav-link">
-                                Contact
+                            <Link to="/admin" className="nav-link">
+                                Admin
                             </Link>
                         </li>
                         <li className="nav-item">
@@ -50,22 +68,39 @@ function Navbar ()
                                 Gallery
                             </Link>
                         </li>
-                        <li className="nav-item">
-                            <Link to="/buku" className="nav-link">
-                                Buku
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/transaksi" className="nav-link">
-                                Transaksi
-                            </Link>
-                        </li>
+                        {user.role=="petugas"&&(
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/buku" className="nav-link">
+                                        Buku
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                        {user.role=="admin"&&(
+                            <>
+                                <li className="nav-item">
+                                    <Link to="/transaksi" className="nav-link">
+                                        Transaksi
+                                    </Link>
+                                </li>
+                                <li className="nav-item">
+                                    <Link to="/laporan" className="nav-link">
+                                        Laporan
+                                    </Link>
+                                </li>
+                            </>
+                        )}
+                        
                         <li className="nav-item">
                             <Link onClick={logout} className="nav-link">
                                 Logout
                             </Link>
                         </li>
                     </ul>
+                    <span class="navbar-text alert alert-success" style={{padding:'5px',margin:'4px'}}>
+                    {user.nama_admin}
+                    </span>
                 </div>
             </div>
         )

@@ -9,10 +9,16 @@ import Tambah_data from './pages/Tambah_data'
 import Buku from './pages/Buku'
 import Login from './pages/Login'
 import Transaksi from "./pages/Transaksi";
+import axios from 'axios'
+import Admin from "./pages/Admin";
+import Laporan from "./pages/Laporan";
 
 function Main() {
+    
+
     let load_storage = localStorage.getItem('cart')==null?[]:JSON.parse(localStorage.getItem('cart'))
     const [cartItems, setCartItems] = useState(load_storage);
+    const [user,setUser]=useState([])
     const onAdd = (buku) => {
         const exist = cartItems.find(x => x.isbn === buku.isbn)
         if (exist) {
@@ -48,6 +54,7 @@ function Main() {
     useEffect(() => {
         saveLocalStorage(cartItems)
     }, [cartItems])
+    
     return (
         <Router>
             <Routes>
@@ -57,12 +64,11 @@ function Main() {
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/gallery/t_data" element={<Tambah_data />} />
-                <Route path="/buku" element={<Buku />} />
                 <Route path="/transaksi" element={<Transaksi onAdd={onAdd} onRemove={onRemove} cartItems={cartItems} checkout={checkout} />} />
-                <Route path="*" element={
-                    <NotFound />
-                }
-                ></Route>
+                <Route path="/buku" element={<Buku />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/laporan" element={<Laporan />} />
+                <Route path="*" element={<NotFound />}/>
             </Routes>
         </Router>
     )

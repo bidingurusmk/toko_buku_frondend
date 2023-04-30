@@ -1,17 +1,15 @@
 import React, {Component} from "react"
 import Navbar from '../Components/Navbar'
-class NotFound extends Component{
-    render(){
+function NotFound (){
         return(
             <div>
                 <Navbar />
             <div className="container">
                 <div className="alert alert-success">
-                   notfound
+                   Page not found
                 </div>
             </div>
             </div>
         )
     }
-}
 export default NotFound;
